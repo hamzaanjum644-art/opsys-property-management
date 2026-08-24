@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Opsys Pro Property Management System",
-  description: "Property, unit and tenant lifecycle management.",
+  description: "Properties, units, tenants and documents in one connected record.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

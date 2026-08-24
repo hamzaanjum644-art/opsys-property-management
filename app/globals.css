@@ -2,36 +2,37 @@
 
 /* Opsys Pro - design tokens.
    Palette supplied by Hamza and approved (Decision 22).
-   Nothing outside this block may introduce a new colour. */
+
+   Every value below is a literal hex. Tailwind v4 cannot generate utility
+   classes from tokens that reference other tokens via var(), which is why
+   bg-forest and bg-surface silently did nothing in the first version. */
 
 @theme {
-  /* ---- the five approved values ---- */
-  --color-forest: #07332c; /* deepest - primary actions, sidebar, headings */
-  --color-slate: #485046; /* secondary text, borders, move-out state */
-  --color-sage: #afb7ac; /* muted text, dividers, vacant state */
-  --color-brass: #bca879; /* the single accent - pending, highlights */
-  --color-paper: #ededed; /* page background, card surfaces */
+  /* the five approved values */
+  --color-forest: #07332c;
+  --color-slate: #485046;
+  --color-sage: #afb7ac;
+  --color-brass: #bca879;
+  --color-paper: #ededed;
 
-  /* ---- semantic roles derived from the five ---- */
-  --color-bg: var(--color-paper);
+  /* semantic roles - literal values, not var() references */
+  --color-bg: #ededed;
   --color-surface: #ffffff;
-  --color-ink: var(--color-forest);
-  --color-ink-muted: var(--color-slate);
-  --color-line: var(--color-sage);
-  --color-accent: var(--color-brass);
+  --color-ink: #07332c;
+  --color-ink-muted: #485046;
+  --color-line: #afb7ac;
+  --color-accent: #bca879;
 
-  /* Status colours (sections 7 & 8) mapped into the palette.
-     Occupied/Active read as the strongest green because they are the
-     "working" state; vacant is deliberately quiet, not alarming. */
-  --color-status-vacant: var(--color-sage);
-  --color-status-occupied: var(--color-forest);
-  --color-status-pending: var(--color-brass);
-  --color-status-active: var(--color-forest);
-  --color-status-moveout: var(--color-slate);
-  --color-status-closed: var(--color-sage);
+  /* status colours (sections 7 and 8) */
+  --color-status-vacant: #afb7ac;
+  --color-status-occupied: #07332c;
+  --color-status-pending: #bca879;
+  --color-status-active: #07332c;
+  --color-status-moveout: #485046;
+  --color-status-closed: #afb7ac;
 
-  /* Destructive is the one hue outside the palette - a delete confirmation
-     cannot be sage green. Kept desaturated so it sits with the scheme. */
+  /* the one hue outside the palette - a delete confirmation cannot be
+     sage green. Desaturated so it still sits with the scheme. */
   --color-danger: #8c3a30;
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -40,23 +41,22 @@
   --radius-card: 0.5rem;
 }
 
-/* References (PRP-0001, TEN-0001) are data, not prose - they get the mono
-   face so they stay scannable in dense tables. This is the one typographic
-   signature of the interface. */
+/* References like PRP-0001 are data, not prose, so they take the mono face
+   and stay scannable in dense tables. */
 .ref {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   letter-spacing: 0.02em;
-  color: var(--color-ink-muted);
+  color: #485046;
 }
 
 body {
-  background: var(--color-bg);
-  color: var(--color-ink);
+  background: #ededed;
+  color: #07332c;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-forest);
+  outline: 2px solid #07332c;
   outline-offset: 2px;
 }
 

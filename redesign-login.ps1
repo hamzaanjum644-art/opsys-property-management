@@ -1,3 +1,86 @@
+$ErrorActionPreference='Stop'
+$root = "D:\dev\opsys-property-management"
+if (-not (Test-Path (Join-Path $root 'package.json'))) { Write-Host "  Project not found at $root" -ForegroundColor Red; exit 1 }
+function Save-File($p,$c){ $f=Join-Path $root $p; $d=Split-Path $f -Parent
+ if(-not(Test-Path $d)){New-Item -ItemType Directory -Path $d -Force|Out-Null}
+ $e=New-Object System.Text.UTF8Encoding($false); [System.IO.File]::WriteAllText($f,$c,$e)
+ Write-Host "  [ok] $p" -ForegroundColor Green }
+Write-Host ""; Write-Host "  Redesigning sign in page" -ForegroundColor Cyan; Write-Host ""
+
+Save-File 'app/globals.css' @'
+@import "tailwindcss";
+
+/* Opsys Pro - design tokens.
+   Palette supplied by Hamza and approved (Decision 22).
+
+   Every value below is a literal hex. Tailwind v4 cannot generate utility
+   classes from tokens that reference other tokens via var(), which is why
+   bg-forest and bg-surface silently did nothing in the first version. */
+
+@theme {
+  /* the five approved values */
+  --color-forest: #07332c;
+  --color-slate: #485046;
+  --color-sage: #afb7ac;
+  --color-brass: #bca879;
+  --color-paper: #ededed;
+
+  /* semantic roles - literal values, not var() references */
+  --color-bg: #ededed;
+  --color-surface: #ffffff;
+  --color-ink: #07332c;
+  --color-ink-muted: #485046;
+  --color-line: #afb7ac;
+  --color-accent: #bca879;
+
+  /* status colours (sections 7 and 8) */
+  --color-status-vacant: #afb7ac;
+  --color-status-occupied: #07332c;
+  --color-status-pending: #bca879;
+  --color-status-active: #07332c;
+  --color-status-moveout: #485046;
+  --color-status-closed: #afb7ac;
+
+  /* the one hue outside the palette - a delete confirmation cannot be
+     sage green. Desaturated so it still sits with the scheme. */
+  --color-danger: #8c3a30;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --radius-card: 0.5rem;
+}
+
+/* References like PRP-0001 are data, not prose, so they take the mono face
+   and stay scannable in dense tables. */
+.ref {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  color: #485046;
+}
+
+body {
+  background: #ededed;
+  color: #07332c;
+}
+
+:focus-visible {
+  outline: 2px solid #07332c;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+'@
+
+Save-File 'app/login/page.tsx' @'
 "use client";
 
 import { useState } from "react";
@@ -124,3 +207,26 @@ export default function LoginPage() {
     </main>
   );
 }
+'@
+
+Save-File 'app/layout.tsx' @'
+import type { Metadata } from "next";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "Opsys Pro Property Management System",
+  description: "Properties, units, tenants and documents in one connected record.",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body className="antialiased">{children}</body>
+    </html>
+  );
+}
+'@
+
+Write-Host ""
+Write-Host "  Done. Refresh the sign in page." -ForegroundColor Green
+Write-Host ""
