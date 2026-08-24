@@ -1,3 +1,13 @@
+$ErrorActionPreference='Stop'
+$root = "D:\dev\opsys-property-management"
+if (-not (Test-Path (Join-Path $root 'package.json'))) { Write-Host "  Project not found at $root" -ForegroundColor Red; exit 1 }
+function Save-File($p,$c){ $f=Join-Path $root $p; $d=Split-Path $f -Parent
+ if(-not(Test-Path $d)){New-Item -ItemType Directory -Path $d -Force|Out-Null}
+ $e=New-Object System.Text.UTF8Encoding($false); [System.IO.File]::WriteAllText($f,$c,$e)
+ Write-Host "  [ok] $p" -ForegroundColor Green }
+Write-Host ""; Write-Host "  New sign in page" -ForegroundColor Cyan; Write-Host ""
+
+Save-File 'app/login/page.tsx' @'
 "use client";
 
 import { useState } from "react";
@@ -141,3 +151,8 @@ export default function LoginPage() {
     </main>
   );
 }
+'@
+
+Write-Host ""
+Write-Host "  Done. Run: npm run build   then commit and push." -ForegroundColor Green
+Write-Host ""
