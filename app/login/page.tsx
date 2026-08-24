@@ -6,32 +6,8 @@ import { createBrowserClient } from "@supabase/ssr";
 
 // Section 5 - sign in as Administrator or Staff User.
 //
-// The backdrop is a grid of unit tiles: most sage (vacant), a few forest
-// (occupied). It is the occupancy summary the app is built around, used as
-// ornament. Deterministic, so it does not flicker between renders.
-
-const OCCUPIED = new Set([3, 7, 12, 18, 21, 29, 34, 41, 47, 52, 58, 63, 70, 77, 83, 91]);
-
-function UnitGrid() {
-  return (
-    <div
-      aria-hidden="true"
-      className="absolute inset-0 grid gap-1.5 p-6 opacity-[0.13] pointer-events-none"
-      style={{
-        gridTemplateColumns: "repeat(auto-fill, minmax(34px, 1fr))",
-        gridAutoRows: "34px",
-      }}
-    >
-      {Array.from({ length: 220 }).map((_, i) => (
-        <div
-          key={i}
-          className="rounded-sm"
-          style={{ background: OCCUPIED.has(i % 97) ? "#bca879" : "#afb7ac" }}
-        />
-      ))}
-    </div>
-  );
-}
+// Paper-grey field, forest-green panel. The green is reserved for the one
+// thing the page is for, so the eye lands on it before reading anything.
 
 export default function LoginPage() {
   const router = useRouter();
@@ -63,30 +39,28 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#07332c] flex items-center justify-center px-5 py-12">
-      <UnitGrid />
+    <main className="min-h-screen bg-[#ededed] flex items-center justify-center px-5 py-12">
+      <div className="w-full max-w-[400px]">
+        <div className="overflow-hidden rounded-2xl bg-[#07332c] shadow-[0_24px_60px_-28px_rgba(7,51,44,0.55)]">
+          <div className="px-9 pt-9 pb-7">
+            <p className="font-mono text-[11px] tracking-[0.28em] text-[#bca879]">
+              OPSYS PRO
+            </p>
+            <h1 className="mt-3 text-[24px] leading-snug font-medium text-white">
+              Property Management System
+            </h1>
+            <div className="mt-5 h-px w-12 bg-[#bca879]" />
+            <p className="mt-5 text-[13px] leading-relaxed text-[#afb7ac]">
+              Sign in to manage properties, units, tenants and documents.
+            </p>
+          </div>
 
-      <div className="relative w-full max-w-[380px]">
-        <div className="mb-7 text-center">
-          <p className="font-mono text-[11px] tracking-[0.28em] text-[#bca879]">
-            OPSYS PRO
-          </p>
-          <h1 className="mt-3 text-[26px] leading-tight font-medium text-white">
-            Property Management
-            <br />
-            System
-          </h1>
-        </div>
-
-        <div className="rounded-xl bg-white shadow-[0_18px_50px_-20px_rgba(0,0,0,0.6)]">
-          <div className="h-1 rounded-t-xl bg-[#bca879]" />
-
-          <div className="px-8 py-8">
+          <div className="px-9 pb-9">
             <label
-              className="block text-[13px] font-medium text-[#07332c]"
+              className="block text-[12px] font-medium tracking-wide text-[#afb7ac]"
               htmlFor="email"
             >
-              Email
+              EMAIL
             </label>
             <input
               id="email"
@@ -96,14 +70,14 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && signIn()}
-              className="mt-1.5 w-full rounded-md border border-[#d5d9d3] bg-[#fafbfa] px-3.5 py-2.5 text-sm text-[#07332c] placeholder:text-[#afb7ac] outline-none focus:border-[#07332c] focus:bg-white transition-colors"
+              className="mt-2 w-full rounded-lg border border-[#2c5249] bg-[#0b3f36] px-3.5 py-3 text-sm text-white placeholder:text-[#6e8079] outline-none focus:border-[#bca879] transition-colors"
             />
 
             <label
-              className="mt-5 block text-[13px] font-medium text-[#07332c]"
+              className="mt-5 block text-[12px] font-medium tracking-wide text-[#afb7ac]"
               htmlFor="password"
             >
-              Password
+              PASSWORD
             </label>
             <input
               id="password"
@@ -112,12 +86,12 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && signIn()}
-              className="mt-1.5 w-full rounded-md border border-[#d5d9d3] bg-[#fafbfa] px-3.5 py-2.5 text-sm text-[#07332c] outline-none focus:border-[#07332c] focus:bg-white transition-colors"
+              className="mt-2 w-full rounded-lg border border-[#2c5249] bg-[#0b3f36] px-3.5 py-3 text-sm text-white outline-none focus:border-[#bca879] transition-colors"
             />
 
             {error && (
               <p
-                className="mt-4 rounded-md bg-[#f7ecea] px-3 py-2 text-[13px] text-[#8c3a30]"
+                className="mt-4 rounded-lg bg-[#4a2622] px-3.5 py-2.5 text-[13px] text-[#e6b8b1]"
                 role="alert"
               >
                 {error}
@@ -127,14 +101,14 @@ export default function LoginPage() {
             <button
               onClick={signIn}
               disabled={busy || !email || !password}
-              className="mt-7 w-full rounded-md bg-[#07332c] px-4 py-3 text-sm font-medium text-white hover:bg-[#0b4b40] disabled:bg-[#d5d9d3] disabled:text-[#8b938a] transition-colors"
+              className="mt-7 w-full rounded-lg bg-[#bca879] px-4 py-3 text-sm font-semibold text-[#07332c] hover:bg-[#cbb98e] disabled:bg-[#2c5249] disabled:text-[#6e8079] transition-colors"
             >
               {busy ? "Signing in..." : "Sign in"}
             </button>
           </div>
         </div>
 
-        <p className="mt-5 text-center text-[11px] text-[#7f8f88]">
+        <p className="mt-6 text-center text-[12px] text-[#7d8a83]">
           Administrator and Staff accounts available
         </p>
       </div>
