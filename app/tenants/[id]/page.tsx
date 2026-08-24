@@ -82,7 +82,7 @@ export default async function TenantProfilePage({
                 <span className="ref block">{tenant.property.reference}</span>
                 {tenant.property.name}
               </Link>
-              <span className="text-ink-muted">-></span>
+              <span className="text-ink-muted">{"->"}</span>
               <div className="rounded border border-line px-3 py-2 text-sm text-ink">
                 <span className="ref block">{tenant.unit.reference}</span>
                 {tenant.unit.flatNumber}
