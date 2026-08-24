@@ -55,7 +55,7 @@ export default async function TenantProfilePage({
   return (
     <Shell
       title={tenant.fullName}
-      subtitle={`${tenant.property.name} Â· ${tenant.unit.flatNumber}`}
+      subtitle={`${tenant.property.name} · ${tenant.unit.flatNumber}`}
       action={<StatusBadge status={tenant.status} />}
     >
       <div className="grid lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-5">
@@ -90,7 +90,7 @@ export default async function TenantProfilePage({
               <StatusBadge status={tenant.unit.status} />
             </div>
             <p className="mt-3 text-xs text-ink-muted">
-              {tenant.property.address} Â· {label(tenant.property.region)} Â·{" "}
+              {tenant.property.address} · {label(tenant.property.region)} ·{" "}
               {label(tenant.property.type)}
             </p>
           </div>
@@ -142,7 +142,7 @@ export default async function TenantProfilePage({
                         hour: "2-digit",
                         minute: "2-digit",
                       }).format(e.changedAt)}
-                      {e.note ? ` Â· ${e.note}` : ""}
+                      {e.note ? ` · ${e.note}` : ""}
                     </p>
                   </div>
                 </li>

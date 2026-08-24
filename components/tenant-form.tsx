@@ -131,7 +131,7 @@ export default function TenantForm({ groups }: { groups: PropertyGroup[] }) {
           disabled={pending || !hasVacancy}
           className="rounded bg-forest px-4 py-2 text-sm text-white disabled:opacity-50"
         >
-          {pending ? "Creatingâ€¦" : "Create tenant"}
+          {pending ? "Creating…" : "Create tenant"}
         </button>
         <Link href="/tenants" className="rounded border border-line px-4 py-2 text-sm text-ink-muted">
           Cancel

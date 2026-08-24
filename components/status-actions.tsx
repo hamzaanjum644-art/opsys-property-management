@@ -81,7 +81,7 @@ export default function StatusActions({
         disabled={pending}
         className="rounded bg-forest px-4 py-2 text-sm text-white disabled:opacity-50"
       >
-        {pending ? "Updatingâ€¦" : next.label}
+        {pending ? "Updating…" : next.label}
       </button>
 
       {error && (
