@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
-/* Opsys Pro â€” design tokens.
+/* Opsys Pro — design tokens.
    Palette supplied by Hamza and approved (Decision 22).
    Nothing outside this block may introduce a new colour. */
 
 @theme {
   /* ---- the five approved values ---- */
-  --color-forest: #07332c; /* deepest â€” primary actions, sidebar, headings */
+  --color-forest: #07332c; /* deepest — primary actions, sidebar, headings */
   --color-slate: #485046; /* secondary text, borders, move-out state */
   --color-sage: #afb7ac; /* muted text, dividers, vacant state */
-  --color-brass: #bca879; /* the single accent â€” pending, highlights */
+  --color-brass: #bca879; /* the single accent — pending, highlights */
   --color-paper: #ededed; /* page background, card surfaces */
 
   /* ---- semantic roles derived from the five ---- */
@@ -30,7 +30,7 @@
   --color-status-moveout: var(--color-slate);
   --color-status-closed: var(--color-sage);
 
-  /* Destructive is the one hue outside the palette â€” a delete confirmation
+  /* Destructive is the one hue outside the palette — a delete confirmation
      cannot be sage green. Kept desaturated so it sits with the scheme. */
   --color-danger: #8c3a30;
 
@@ -40,7 +40,7 @@
   --radius-card: 0.5rem;
 }
 
-/* References (PRP-0001, TEN-0001) are data, not prose â€” they get the mono
+/* References (PRP-0001, TEN-0001) are data, not prose — they get the mono
    face so they stay scannable in dense tables. This is the one typographic
    signature of the interface. */
 .ref {

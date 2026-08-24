@@ -1,4 +1,4 @@
--- Opsys Pro â€” display reference generation (Decision 7)
+-- Opsys Pro — display reference generation (Decision 7)
 --
 -- Why sequences instead of count()+1: two tenants created at the same moment
 -- would both read the same count and generate the same reference. Postgres

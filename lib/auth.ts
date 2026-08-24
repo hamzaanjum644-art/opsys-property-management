@@ -4,7 +4,7 @@ import { prisma } from "./prisma";
 import type { UserRole } from "@prisma/client";
 
 /**
- * Section 5 â€” Administrator / Staff User.
+ * Section 5 — Administrator / Staff User.
  *
  * Full role-based permissions are NOT required for the 2-day MVP, but the
  * application must be structured so they can be added later. That structure

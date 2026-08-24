@@ -5,7 +5,7 @@ import { updateProperty } from "@/lib/actions/properties";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
 
-// Section 6 â€” "Edit a property."
+// Section 6 — "Edit a property."
 
 export default async function EditPropertyPage({
   params,

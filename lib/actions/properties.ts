@@ -8,7 +8,7 @@ import { requireAdmin } from "@/lib/auth";
 import { friendlyDbError } from "@/lib/tenant-workflow";
 
 // Section 6 (Property Register) and Section 7 (Unit Management).
-// Section 19 requires validation of required fields â€” that is the Zod schema.
+// Section 19 requires validation of required fields — that is the Zod schema.
 // Section 5: writes are Administrator-only, enforced server-side.
 
 const PropertySchema = z.object({

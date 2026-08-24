@@ -4,7 +4,7 @@ import StatusBadge from "@/components/status-badge";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, isAdmin } from "@/lib/auth";
 
-// Section 8 â€” Tenant Management. The list shows the property and unit each
+// Section 8 — Tenant Management. The list shows the property and unit each
 // tenant occupies, satisfying "the tenant profile should clearly show the
 // property and unit they occupy" at index level too.
 

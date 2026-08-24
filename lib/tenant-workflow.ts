@@ -3,7 +3,7 @@ import { prisma } from "./prisma";
 import { dispatchWebhook } from "./webhooks";
 
 /**
- * Section 10 â€” Tenant Status & Connected Workflow.
+ * Section 10 — Tenant Status & Connected Workflow.
  *
  * This is the ONLY place in the codebase that writes Tenant.status or
  * Unit.status. Nothing else may touch those two fields. That single rule is
@@ -67,7 +67,7 @@ export async function transitionTenant(
     // Guard: forward-only lifecycle (Decision D3).
     if (tenant.status !== rule.from) {
       throw new WorkflowError(
-        `Cannot ${rule.label.toLowerCase()} â€” this tenant is ${labelFor(tenant.status)}, not ${labelFor(rule.from)}.`
+        `Cannot ${rule.label.toLowerCase()} — this tenant is ${labelFor(tenant.status)}, not ${labelFor(rule.from)}.`
       );
     }
 
@@ -78,7 +78,7 @@ export async function transitionTenant(
       const holder = await tx.unit.findUnique({ where: { id: tenant.unitId } });
       if (holder?.currentTenantId && holder.currentTenantId !== tenant.id) {
         throw new WorkflowError(
-          "Cannot complete move-in â€” this unit already has a current tenant."
+          "Cannot complete move-in — this unit already has a current tenant."
         );
       }
     }
@@ -106,7 +106,7 @@ export async function transitionTenant(
       });
     }
 
-    // Section 13 â€” status changes must be traceable.
+    // Section 13 — status changes must be traceable.
     await tx.tenancyEvent.create({
       data: {
         tenantId: tenant.id,
@@ -121,7 +121,7 @@ export async function transitionTenant(
     return updatedTenant;
   });
 
-  // Section 12 â€” automation fires AFTER commit, outside the transaction.
+  // Section 12 — automation fires AFTER commit, outside the transaction.
   // A Make.com outage must never roll back or block a real business action.
   if (action === "MARK_MOVE_OUT" || action === "COMPLETE_MOVE_OUT") {
     void dispatchWebhook(
@@ -146,7 +146,7 @@ function labelFor(s: TenantStatus) {
 export function friendlyDbError(e: unknown): string | null {
   if (e instanceof Prisma.PrismaClientKnownRequestError) {
     if (e.code === "P2003" || e.code === "P2014")
-      return "Cannot delete this record â€” other records still reference it.";
+      return "Cannot delete this record — other records still reference it.";
     if (e.code === "P2002")
       return "That value is already in use. Try a different one.";
   }

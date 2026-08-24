@@ -3,7 +3,7 @@ import PropertyForm from "@/components/property-form";
 import { createProperty } from "@/lib/actions/properties";
 import { requireAdmin } from "@/lib/auth";
 
-// Section 6 â€” "Create a property."
+// Section 6 — "Create a property."
 
 export default async function NewPropertyPage() {
   await requireAdmin();

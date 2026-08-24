@@ -3,8 +3,8 @@ import TenantForm from "@/components/tenant-form";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
 
-// Section 8 â€” create a tenant linked to a specific Unit and Property.
-// Section 18 â€” "Create Tenant and assign them to a Unit" in one step.
+// Section 8 — create a tenant linked to a specific Unit and Property.
+// Section 18 — "Create Tenant and assign them to a Unit" in one step.
 
 export const dynamic = "force-dynamic";
 
