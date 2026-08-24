@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+/* Opsys Pro â€” design tokens.
+   Palette supplied by Hamza and approved (Decision 22).
+   Nothing outside this block may introduce a new colour. */
+
+@theme {
+  /* ---- the five approved values ---- */
+  --color-forest: #07332c; /* deepest â€” primary actions, sidebar, headings */
+  --color-slate: #485046; /* secondary text, borders, move-out state */
+  --color-sage: #afb7ac; /* muted text, dividers, vacant state */
+  --color-brass: #bca879; /* the single accent â€” pending, highlights */
+  --color-paper: #ededed; /* page background, card surfaces */
+
+  /* ---- semantic roles derived from the five ---- */
+  --color-bg: var(--color-paper);
+  --color-surface: #ffffff;
+  --color-ink: var(--color-forest);
+  --color-ink-muted: var(--color-slate);
+  --color-line: var(--color-sage);
+  --color-accent: var(--color-brass);
+
+  /* Status colours (sections 7 & 8) mapped into the palette.
+     Occupied/Active read as the strongest green because they are the
+     "working" state; vacant is deliberately quiet, not alarming. */
+  --color-status-vacant: var(--color-sage);
+  --color-status-occupied: var(--color-forest);
+  --color-status-pending: var(--color-brass);
+  --color-status-active: var(--color-forest);
+  --color-status-moveout: var(--color-slate);
+  --color-status-closed: var(--color-sage);
+
+  /* Destructive is the one hue outside the palette â€” a delete confirmation
+     cannot be sage green. Kept desaturated so it sits with the scheme. */
+  --color-danger: #8c3a30;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --radius-card: 0.5rem;
+}
+
+/* References (PRP-0001, TEN-0001) are data, not prose â€” they get the mono
+   face so they stay scannable in dense tables. This is the one typographic
+   signature of the interface. */
+.ref {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  color: var(--color-ink-muted);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-forest);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,211 @@
+// Opsys Pro â€” Mini Property & Tenant Management
+// Data model implementing project file sections 6, 7, 8, 9, 10, 13.
+// Every model and field below traces to a numbered requirement â€” see comments.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")      // pooled (port 6543) â€” used at runtime
+  directUrl = env("DIRECT_URL")        // direct (port 5432) â€” used for migrations
+}
+
+// ---------------------------------------------------------------- enums
+
+enum Region {
+  NORTH
+  SOUTH
+  EAST
+  WEST
+}
+
+enum PropertyType {
+  HMO
+  SELF_CONTAINED
+}
+
+enum PropertyStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum UnitStatus {
+  VACANT
+  OCCUPIED
+}
+
+enum TenantStatus {
+  PENDING
+  ACTIVE
+  MOVE_OUT
+  CLOSED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  PREFER_NOT_TO_SAY
+}
+
+enum DocumentType {
+  PHOTO_ID
+  UC_PROOF
+  BANK_STATEMENT
+  OTHER
+}
+
+enum DocumentStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum UserRole {
+  ADMIN
+  STAFF
+}
+
+// ---------------------------------------------------------------- models
+
+/// Section 6 â€” Property Register.
+/// "Number of Units" is intentionally NOT stored: it is derived from the
+/// units relation (Decision 8), per section 19's no-duplicate-data rule.
+model Property {
+  id        String         @id @default(uuid())
+  reference String         @unique // PRP-0001, generated from a Postgres sequence
+  name      String
+  address   String
+  region    Region
+  type      PropertyType
+  status    PropertyStatus @default(ACTIVE)
+
+  units   Unit[]
+  tenants Tenant[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([region])
+  @@index([status])
+  @@map("properties")
+}
+
+/// Section 7 â€” Unit / Flat Management.
+/// propertyId is non-nullable with onDelete: Restrict, which enforces
+/// "a unit must never exist without a parent property" at the DB level.
+model Unit {
+  id         String     @id @default(uuid())
+  reference  String     @unique // UNT-0001
+  flatNumber String
+  status     UnitStatus @default(VACANT)
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Restrict)
+
+  /// @unique enforces "one current tenant per unit" (Decision 11) in Postgres,
+  /// not just in application code.
+  currentTenantId String? @unique
+  currentTenant   Tenant? @relation("CurrentOccupancy", fields: [currentTenantId], references: [id], onDelete: SetNull)
+
+  tenants Tenant[]       @relation("UnitHistory")
+  events  TenancyEvent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([propertyId, flatNumber]) // no duplicate "Flat 3B" within one property
+  @@index([status])
+  @@map("units")
+}
+
+/// Section 8 â€” Tenant Management.
+/// moveOutDate is an APPROVED ADDITION (Decision 10) â€” it is not listed in
+/// section 8 of the project file. Recorded in the decision log.
+model Tenant {
+  id          String       @id @default(uuid())
+  reference   String       @unique // TEN-0001
+  fullName    String
+  dateOfBirth DateTime?
+  gender      Gender?
+  phone       String
+  email       String?
+  moveInDate  DateTime?
+  moveOutDate DateTime?
+  status      TenantStatus @default(PENDING)
+  archived    Boolean      @default(false) // Decision 12: archive, never hard-delete
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Restrict)
+
+  unitId String
+  unit   Unit   @relation("UnitHistory", fields: [unitId], references: [id], onDelete: Restrict)
+
+  occupiedUnit Unit?            @relation("CurrentOccupancy")
+  documents    TenantDocument[]
+  events       TenancyEvent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([propertyId])
+  @@index([unitId])
+  @@map("tenants")
+}
+
+/// Section 9 â€” Tenant Documents.
+/// Files live in Supabase Storage; only the path is stored here.
+model TenantDocument {
+  id          String         @id @default(uuid())
+  type        DocumentType
+  status      DocumentStatus @default(PENDING)
+  fileName    String
+  storagePath String // e.g. {tenantId}/{uuid}-{filename}
+  fileSize    Int
+  mimeType    String
+  uploadDate  DateTime       @default(now())
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@map("tenant_documents")
+}
+
+/// Section 13 â€” "Tenant status changes must be traceable."
+/// Written inside the same transaction as every status transition.
+model TenancyEvent {
+  id         String        @id @default(uuid())
+  fromStatus TenantStatus?
+  toStatus   TenantStatus
+  note       String?
+  changedAt  DateTime      @default(now())
+  changedBy  String // Supabase auth user id
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  unitId String
+  unit   Unit   @relation(fields: [unitId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId])
+  @@index([changedAt])
+  @@map("tenancy_events")
+}
+
+/// Section 5 â€” Administrator / Staff User.
+/// Mirrors the Supabase auth user so role can be joined in queries.
+/// This is NOT the "relevant staff member" entity from section 12 â€”
+/// notifications go to a fixed recipient (Decision 6).
+model AppUser {
+  id        String   @id // matches Supabase auth.users.id
+  email     String   @unique
+  fullName  String
+  role      UserRole @default(STAFF)
+  createdAt DateTime @default(now())
+
+  @@map("app_users")
+}
