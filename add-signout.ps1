@@ -1,3 +1,13 @@
+$ErrorActionPreference='Stop'
+$root = "D:\dev\opsys-property-management"
+if (-not (Test-Path (Join-Path $root 'package.json'))) { Write-Host "  Project not found at $root" -ForegroundColor Red; exit 1 }
+function Save-File($p,$c){ $f=Join-Path $root $p; $d=Split-Path $f -Parent
+ if(-not(Test-Path $d)){New-Item -ItemType Directory -Path $d -Force|Out-Null}
+ $e=New-Object System.Text.UTF8Encoding($false); [System.IO.File]::WriteAllText($f,$c,$e)
+ Write-Host "  [ok] $p" -ForegroundColor Green }
+Write-Host ""; Write-Host "  Adding sign out" -ForegroundColor Cyan; Write-Host ""
+
+Save-File 'components/shell.tsx' @'
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import SignOutButton from "@/components/sign-out-button";
@@ -76,3 +86,45 @@ export default async function Shell({
     </div>
   );
 }
+'@
+
+Save-File 'components/sign-out-button.tsx' @'
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { createBrowserClient } from "@supabase/ssr";
+
+// Section 5 — lets a reviewer switch between the Administrator and Staff
+// accounts to see the permission difference.
+
+export default function SignOutButton() {
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+
+  async function signOut() {
+    setBusy(true);
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  }
+
+  return (
+    <button
+      onClick={signOut}
+      disabled={busy}
+      className="mt-2 text-[11px] text-sage hover:text-white underline disabled:opacity-50"
+    >
+      {busy ? "Signing out" : "Sign out"}
+    </button>
+  );
+}
+'@
+
+Write-Host ""
+Write-Host "  Done. Sign out appears at the bottom of the sidebar." -ForegroundColor Green
+Write-Host ""
