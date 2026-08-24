@@ -2,7 +2,7 @@ import Link from "next/link";
 import Shell from "@/components/shell";
 import { prisma } from "@/lib/prisma";
 
-// Section 11 — Management dashboard.
+// Section 11 - Management dashboard.
 // "The numbers must come from the database/application records, not hard-coded
 // values." Every figure below is a live count. Nothing is stored or cached.
 

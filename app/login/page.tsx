@@ -85,7 +85,7 @@ export default function LoginPage() {
             disabled={busy || !email || !password}
             className="mt-6 w-full rounded bg-[--color-forest] px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
           >
-            {busy ? "Signing in…" : "Sign in"}
+            {busy ? "Signing in..." : "Sign in"}
           </button>
         </div>
       </div>

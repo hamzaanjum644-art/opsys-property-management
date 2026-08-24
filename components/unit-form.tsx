@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useRef } from "react";
 import { createUnit } from "@/lib/actions/properties";
 
-// Section 7 â€” a unit is always created from inside its parent property, so
+// Section 7 - a unit is always created from inside its parent property, so
 // there is no route that can produce an orphan unit.
 
 export default function AddUnitForm({ propertyId }: { propertyId: string }) {
@@ -35,7 +35,7 @@ export default function AddUnitForm({ propertyId }: { propertyId: string }) {
           disabled={pending}
           className="rounded bg-forest px-4 py-2 text-sm text-white disabled:opacity-50"
         >
-          {pending ? "Adding…" : "Add unit"}
+          {pending ? "Adding..." : "Add unit"}
         </button>
       </div>
 

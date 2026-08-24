@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 // Two jobs:
 //  1. Confirms the Vercel deploy is alive and can reach Postgres.
 //  2. Acts as the keep-alive ping. Supabase pauses free projects after a week
-//     without database activity — this query counts as activity.
+//     without database activity - this query counts as activity.
 //
 // Deliberately public (no auth) so a reviewer or an uptime pinger can hit it.
 

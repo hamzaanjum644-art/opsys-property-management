@@ -12,7 +12,7 @@ async function ref(prefix: string, seq: string) {
 }
 
 async function main() {
-  console.log("Seeding Opsys Pro with fictional data…");
+  console.log("Seeding Opsys Pro with fictional data...");
 
   const properties = [
     { name: "Ashgrove House", address: "14 Ashgrove Road, Leeds LS6 2QT", region: Region.NORTH, type: PropertyType.HMO, units: ["Flat 1A", "Flat 1B", "Flat 2A", "Flat 2B"] },
@@ -64,7 +64,7 @@ async function main() {
         unitId: firstUnit.id,
       },
     });
-    console.log(`  ${tenant.reference}  ${tenant.fullName} — PENDING in ${firstUnit.flatNumber}`);
+    console.log(`  ${tenant.reference}  ${tenant.fullName} - PENDING in ${firstUnit.flatNumber}`);
   }
 
   console.log("Done.");

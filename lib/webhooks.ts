@@ -1,5 +1,5 @@
 /**
- * Section 12 — Make.com automation.
+ * Section 12 - Make.com automation.
  *
  * One payload shape serves all three events; Scenario 2 routes on `event`.
  * Fire-and-forget: failures are logged, never surfaced as a blocked action.
@@ -29,7 +29,7 @@ const TARGET: Record<OpsysEvent, string | undefined> = {
 export async function dispatchWebhook(event: OpsysEvent, tenant: TenantWithRelations) {
   const url = TARGET[event];
   if (!url) {
-    console.warn(`[opsys] No webhook URL configured for ${event} — skipped.`);
+    console.warn(`[opsys] No webhook URL configured for ${event} - skipped.`);
     return;
   }
 

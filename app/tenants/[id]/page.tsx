@@ -6,15 +6,15 @@ import StatusActions from "@/components/status-actions";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, isAdmin } from "@/lib/auth";
 
-// Section 8 â€” "The tenant profile should clearly show the property and unit
+// Section 8 - "The tenant profile should clearly show the property and unit
 // they occupy."
-// Section 10 â€” workflow actions.
-// Section 13 â€” "Tenant status changes must be traceable" (the history below).
+// Section 10 - workflow actions.
+// Section 13 - "Tenant status changes must be traceable" (the history below).
 
 export const dynamic = "force-dynamic";
 
 function fmt(d: Date | null) {
-  if (!d) return "â€”";
+  if (!d) return "-";
   return new Intl.DateTimeFormat("en-GB", {
     day: "numeric",
     month: "short",
@@ -45,9 +45,9 @@ export default async function TenantProfilePage({
   const details = [
     { label: "Reference", value: tenant.reference, mono: true },
     { label: "Phone", value: tenant.phone },
-    { label: "Email", value: tenant.email ?? "â€”" },
+    { label: "Email", value: tenant.email ?? "-" },
     { label: "Date of birth", value: fmt(tenant.dateOfBirth) },
-    { label: "Gender", value: tenant.gender ? label(tenant.gender) : "â€”" },
+    { label: "Gender", value: tenant.gender ? label(tenant.gender) : "-" },
     { label: "Move-in date", value: fmt(tenant.moveInDate) },
     { label: "Move-out date", value: fmt(tenant.moveOutDate) },
   ];
@@ -55,7 +55,7 @@ export default async function TenantProfilePage({
   return (
     <Shell
       title={tenant.fullName}
-      subtitle={`${tenant.property.name} · ${tenant.unit.flatNumber}`}
+      subtitle={`${tenant.property.name} | ${tenant.unit.flatNumber}`}
       action={<StatusBadge status={tenant.status} />}
     >
       <div className="grid lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-5">
@@ -82,7 +82,7 @@ export default async function TenantProfilePage({
                 <span className="ref block">{tenant.property.reference}</span>
                 {tenant.property.name}
               </Link>
-              <span className="text-ink-muted">â†’</span>
+              <span className="text-ink-muted">-></span>
               <div className="rounded border border-line px-3 py-2 text-sm text-ink">
                 <span className="ref block">{tenant.unit.reference}</span>
                 {tenant.unit.flatNumber}
@@ -90,7 +90,7 @@ export default async function TenantProfilePage({
               <StatusBadge status={tenant.unit.status} />
             </div>
             <p className="mt-3 text-xs text-ink-muted">
-              {tenant.property.address} · {label(tenant.property.region)} ·{" "}
+              {tenant.property.address} | {label(tenant.property.region)} |{" "}
               {label(tenant.property.type)}
             </p>
           </div>
@@ -132,7 +132,7 @@ export default async function TenantProfilePage({
                   <div className="mt-1.5 h-1.5 w-1.5 rounded-full bg-brass shrink-0" />
                   <div className="min-w-0">
                     <p className="text-sm text-ink">
-                      {e.fromStatus ? `${label(e.fromStatus)} â†’ ` : ""}
+                      {e.fromStatus ? `${label(e.fromStatus)} -> ` : ""}
                       {label(e.toStatus)}
                     </p>
                     <p className="text-xs text-ink-muted">
@@ -142,7 +142,7 @@ export default async function TenantProfilePage({
                         hour: "2-digit",
                         minute: "2-digit",
                       }).format(e.changedAt)}
-                      {e.note ? ` · ${e.note}` : ""}
+                      {e.note ? ` | ${e.note}` : ""}
                     </p>
                   </div>
                 </li>

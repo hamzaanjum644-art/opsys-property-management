@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 
-// Section 5 â€” lets a reviewer switch between the Administrator and Staff
+// Section 5 - lets a reviewer switch between the Administrator and Staff
 // accounts to see the permission difference.
 
 export default function SignOutButton() {

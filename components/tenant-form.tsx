@@ -100,7 +100,7 @@ export default function TenantForm({ groups }: { groups: PropertyGroup[] }) {
         {groups
           .filter((g) => g.units.length > 0)
           .map((g) => (
-            <optgroup key={g.id} label={`${g.reference} â€” ${g.name}`}>
+            <optgroup key={g.id} label={`${g.reference} - ${g.name}`}>
               {g.units.map((u) => (
                 <option key={u.id} value={u.id}>
                   {u.flatNumber}
@@ -131,7 +131,7 @@ export default function TenantForm({ groups }: { groups: PropertyGroup[] }) {
           disabled={pending || !hasVacancy}
           className="rounded bg-forest px-4 py-2 text-sm text-white disabled:opacity-50"
         >
-          {pending ? "Creating…" : "Create tenant"}
+          {pending ? "Creating..." : "Create tenant"}
         </button>
         <Link href="/tenants" className="rounded border border-line px-4 py-2 text-sm text-ink-muted">
           Cancel

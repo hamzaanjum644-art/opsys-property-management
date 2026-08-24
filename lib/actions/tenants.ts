@@ -13,8 +13,8 @@ import {
 } from "@/lib/tenant-workflow";
 import { dispatchWebhook } from "@/lib/webhooks";
 
-// Section 8 — Tenant Management.
-// Section 10 — status transitions route through transitionTenant() only.
+// Section 8 - Tenant Management.
+// Section 10 - status transitions route through transitionTenant() only.
 
 const TenantSchema = z.object({
   fullName: z.string().trim().min(1, "Full name is required."),
@@ -50,7 +50,7 @@ export async function createTenant(_prev: ActionState, formData: FormData): Prom
 
   const { unitId, fullName, phone, email, dateOfBirth, gender } = parsed.data;
 
-  // Property is derived from the unit rather than submitted separately —
+  // Property is derived from the unit rather than submitted separately -
   // section 19: don't duplicate data that can be referenced.
   const unit = await prisma.unit.findUnique({
     where: { id: unitId },
@@ -59,7 +59,7 @@ export async function createTenant(_prev: ActionState, formData: FormData): Prom
 
   if (!unit) return { error: "That unit no longer exists." };
 
-  // Decision D1 — one live tenant per unit.
+  // Decision D1 - one live tenant per unit.
   if (unit.currentTenantId) {
     return { error: `${unit.flatNumber} already has a current tenant.` };
   }
@@ -76,7 +76,7 @@ export async function createTenant(_prev: ActionState, formData: FormData): Prom
         gender: gender ? (gender as "MALE" | "FEMALE" | "OTHER" | "PREFER_NOT_TO_SAY") : null,
         propertyId: unit.propertyId,
         unitId: unit.id,
-        // Section 10 step 1 — new tenant is always PENDING.
+        // Section 10 step 1 - new tenant is always PENDING.
         status: "PENDING",
       },
       include: { property: true, unit: true },
@@ -84,7 +84,7 @@ export async function createTenant(_prev: ActionState, formData: FormData): Prom
 
     tenantId = created.id;
 
-    // Section 13 — the creation itself is a traceable event.
+    // Section 13 - the creation itself is a traceable event.
     await prisma.tenancyEvent.create({
       data: {
         tenantId: created.id,
@@ -96,7 +96,7 @@ export async function createTenant(_prev: ActionState, formData: FormData): Prom
       },
     });
 
-    // Section 12, Automation 1 — New Tenant Notification.
+    // Section 12, Automation 1 - New Tenant Notification.
     void dispatchWebhook("tenant.created", created);
   } catch (e) {
     return { error: friendlyDbError(e) ?? "Could not create the tenant. Try again." };

@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { runTransition } from "@/lib/actions/tenants";
 import type { TransitionAction } from "@/lib/tenant-workflow";
 
-// Section 10 â€” the connected workflow, as explicit actions rather than a free
+// Section 10 - the connected workflow, as explicit actions rather than a free
 // status dropdown. Only the one legal next step is ever offered, so an illegal
 // transition cannot be attempted from the interface.
 
@@ -81,7 +81,7 @@ export default function StatusActions({
         disabled={pending}
         className="rounded bg-forest px-4 py-2 text-sm text-white disabled:opacity-50"
       >
-        {pending ? "Updating…" : next.label}
+        {pending ? "Updating..." : next.label}
       </button>
 
       {error && (

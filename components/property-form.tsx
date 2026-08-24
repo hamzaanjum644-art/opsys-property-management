@@ -108,7 +108,7 @@ export default function PropertyForm({
           disabled={pending}
           className="rounded bg-forest px-4 py-2 text-sm text-white disabled:opacity-50"
         >
-          {pending ? "Saving…" : submitLabel}
+          {pending ? "Saving..." : submitLabel}
         </button>
         <Link
           href={cancelHref}

@@ -6,8 +6,8 @@ import AddUnitForm from "@/components/unit-form";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, isAdmin } from "@/lib/auth";
 
-// Section 6 â€” "Open a property and see its units." / "Show occupancy summary."
-// Section 7 â€” PROPERTY -> contains -> UNIT, with the current tenant shown.
+// Section 6 - "Open a property and see its units." / "Show occupancy summary."
+// Section 7 - PROPERTY -> contains -> UNIT, with the current tenant shown.
 
 export const dynamic = "force-dynamic";
 
@@ -38,7 +38,7 @@ export default async function PropertyDetailPage({
   return (
     <Shell
       title={property.name}
-      subtitle={`${property.address} · ${label(property.region)} · ${label(property.type)}`}
+      subtitle={`${property.address} | ${label(property.region)} | ${label(property.type)}`}
       action={
         isAdmin(user) ? (
           <Link
@@ -99,7 +99,7 @@ export default async function PropertyDetailPage({
                   {u.currentTenant.fullName}
                 </Link>
               ) : (
-                <span className="text-ink-muted">â€”</span>
+                <span className="text-ink-muted">-</span>
               )}
             </div>
           </div>

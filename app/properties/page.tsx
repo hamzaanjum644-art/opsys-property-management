@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { label } from "@/components/status-badge";
 import { isAdmin, getCurrentUser } from "@/lib/auth";
 
-// Section 6 â€” Property Register.
+// Section 6 - Property Register.
 // Occupancy and unit count are DERIVED from unit records (Decision 8), never
 // stored, per section 19's rule against duplicating referenceable data.
 
@@ -103,7 +103,7 @@ export default async function PropertiesPage({
               <div className="min-w-0">
                 <p className="text-sm text-ink truncate">{p.name}</p>
                 <p className="text-xs text-ink-muted truncate">
-                  {p.address} · {label(p.region)} · {label(p.type)}
+                  {p.address} | {label(p.region)} | {label(p.type)}
                 </p>
               </div>
               <div className="text-sm text-ink">{total}</div>
