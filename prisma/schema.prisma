@@ -1,6 +1,6 @@
-// Opsys Pro â€” Mini Property & Tenant Management
+// Opsys Pro - Mini Property & Tenant Management
 // Data model implementing project file sections 6, 7, 8, 9, 10, 13.
-// Every model and field below traces to a numbered requirement â€” see comments.
+// Every model and field below traces to a numbered requirement - see comments.
 
 generator client {
   provider = "prisma-client-js"
@@ -8,8 +8,8 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL")      // pooled (port 6543) â€” used at runtime
-  directUrl = env("DIRECT_URL")        // direct (port 5432) â€” used for migrations
+  url       = env("DATABASE_URL")      // pooled (port 6543) - used at runtime
+  directUrl = env("DIRECT_URL")        // direct (port 5432) - used for migrations
 }
 
 // ---------------------------------------------------------------- enums
@@ -70,7 +70,7 @@ enum UserRole {
 
 // ---------------------------------------------------------------- models
 
-/// Section 6 â€” Property Register.
+/// Section 6 - Property Register.
 /// "Number of Units" is intentionally NOT stored: it is derived from the
 /// units relation (Decision 8), per section 19's no-duplicate-data rule.
 model Property {
@@ -93,7 +93,7 @@ model Property {
   @@map("properties")
 }
 
-/// Section 7 â€” Unit / Flat Management.
+/// Section 7 - Unit / Flat Management.
 /// propertyId is non-nullable with onDelete: Restrict, which enforces
 /// "a unit must never exist without a parent property" at the DB level.
 model Unit {
@@ -121,8 +121,8 @@ model Unit {
   @@map("units")
 }
 
-/// Section 8 â€” Tenant Management.
-/// moveOutDate is an APPROVED ADDITION (Decision 10) â€” it is not listed in
+/// Section 8 - Tenant Management.
+/// moveOutDate is an APPROVED ADDITION (Decision 10) - it is not listed in
 /// section 8 of the project file. Recorded in the decision log.
 model Tenant {
   id          String       @id @default(uuid())
@@ -156,7 +156,7 @@ model Tenant {
   @@map("tenants")
 }
 
-/// Section 9 â€” Tenant Documents.
+/// Section 9 - Tenant Documents.
 /// Files live in Supabase Storage; only the path is stored here.
 model TenantDocument {
   id          String         @id @default(uuid())
@@ -175,7 +175,7 @@ model TenantDocument {
   @@map("tenant_documents")
 }
 
-/// Section 13 â€” "Tenant status changes must be traceable."
+/// Section 13 - "Tenant status changes must be traceable."
 /// Written inside the same transaction as every status transition.
 model TenancyEvent {
   id         String        @id @default(uuid())
@@ -196,9 +196,27 @@ model TenancyEvent {
   @@map("tenancy_events")
 }
 
-/// Section 5 â€” Administrator / Staff User.
+/// Section 12, Automation 2 - "Notify the relevant staff member. Create a
+/// follow-up task or log the move-out event." This is the log half of that
+/// requirement, written by Make's HTTP module when a move-out completes.
+/// Kept inside the app's own database rather than an external sheet, so the
+/// automation's output is queryable alongside every other record.
+model MoveOutLog {
+  id           String   @id @default(uuid())
+  event        String // "move_out_marked" | "move_out_completed"
+  tenantRef    String
+  tenantName   String
+  propertyName String
+  unitNumber   String
+  loggedAt     DateTime @default(now())
+
+  @@index([loggedAt])
+  @@map("move_out_logs")
+}
+
+/// Section 5 - Administrator / Staff User.
 /// Mirrors the Supabase auth user so role can be joined in queries.
-/// This is NOT the "relevant staff member" entity from section 12 â€”
+/// This is NOT the "relevant staff member" entity from section 12 -
 /// notifications go to a fixed recipient (Decision 6).
 model AppUser {
   id        String   @id // matches Supabase auth.users.id
